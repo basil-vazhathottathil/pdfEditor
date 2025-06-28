@@ -1,3 +1,4 @@
+// ✅ groqApi.js
 import axios from 'axios';
 
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
@@ -11,12 +12,15 @@ export const getTiptapJsonFromText = async (rawText) => {
         messages: [
           {
             role: 'system',
-            content: 'You are a document formatter. Convert plain text into valid Tiptap JSON. Respond ONLY with the JSON, no explanation, no markdown, no text before or after.',
+            content: `You are a document formatter. Convert plain text into valid Tiptap JSON.
+Infer headings based on font size or content patterns.
+Structure the content with paragraphs, headings, and emphasis.
+Do not include explanations, markdown, or anything other than the JSON.`
           },
           {
             role: 'user',
             content: `Convert this plain text to Tiptap JSON. Respond ONLY with the JSON:\n\n${rawText}`,
-          },
+          }
         ],
         temperature: 0.3,
       },
@@ -27,7 +31,7 @@ export const getTiptapJsonFromText = async (rawText) => {
         },
       }
     );
-    // Extract JSON from the response, even if extra text is present
+
     let content = response.data.choices[0].message.content.trim();
     const match = content.match(/\{[\s\S]*\}/);
     if (match) content = match[0];

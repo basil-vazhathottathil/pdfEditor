@@ -1,3 +1,4 @@
+// ✅ pdfExtract.js
 import { getDocument } from 'pdfjs-dist';
 
 export const extractTextFromPdf = async (fileUrl) => {
@@ -7,6 +8,7 @@ export const extractTextFromPdf = async (fileUrl) => {
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
     const content = await page.getTextContent();
+
     const pageText = content.items.map((item) => item.str).join(' ');
     text.push(`Page ${i}: ${pageText}`);
   }

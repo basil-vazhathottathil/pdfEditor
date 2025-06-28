@@ -1,3 +1,4 @@
+// ✅ Editor.jsx
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { FontSize } from '../extensions/FontSize';
@@ -61,7 +62,7 @@ export default function Editor({ tiptapJson, onUpdate }) {
         >
           H2
         </button>
-        {/* Font Family Dropdown */}
+
         <select
           onChange={e => editor.chain().focus().setFontFamily(e.target.value).run()}
           value={editor.getAttributes('fontFamily').family || ''}
@@ -72,7 +73,7 @@ export default function Editor({ tiptapJson, onUpdate }) {
             <option key={f.value} value={f.value}>{f.label}</option>
           ))}
         </select>
-        {/* Font Size Dropdown */}
+
         <select
           value={editor.getAttributes('fontSize').size || ''}
           onChange={e => editor.chain().focus().setFontSize(e.target.value).run()}
@@ -83,6 +84,13 @@ export default function Editor({ tiptapJson, onUpdate }) {
             <option key={size.value} value={size.value}>{size.label}</option>
           ))}
         </select>
+
+        <button
+          style={{ marginLeft: 'auto' }}
+          onClick={() => onUpdate(editor)}
+        >
+          Export PDF
+        </button>
       </div>
       <EditorContent editor={editor} />
     </div>

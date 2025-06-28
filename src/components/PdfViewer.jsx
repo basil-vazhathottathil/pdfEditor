@@ -14,15 +14,24 @@ export default function PdfViewer({ file }) {
     const render = async () => {
       const pdf = await getDocument(file).promise;
       const page = await pdf.getPage(1);
-      const viewport = page.getViewport({ scale: 1.5 });
+
+      // ✅ Apply the PDF's internal rotation
+      const viewport = page.getViewport({ scale: 1.5, rotation: page.rotate });
 
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
+
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
-      // Start rendering
-      renderTask = page.render({ canvasContext: context, viewport });
+      renderTask = page.render({
+        canvasContext: context,
+        viewport,
+      });
+
       try {
         await renderTask.promise;
       } catch (e) {
@@ -34,9 +43,7 @@ export default function PdfViewer({ file }) {
 
     return () => {
       cancelled = true;
-      if (renderTask) {
-        renderTask.cancel();
-      }
+      if (renderTask) renderTask.cancel();
     };
   }, [file]);
 

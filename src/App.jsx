@@ -33,10 +33,10 @@ function App() {
     fileReader.readAsDataURL(file);
   };
 
-  // Handler to update PDF when editor changes
   const handleEditorUpdate = (editor) => {
-    const html = `<div style="min-width:600px;min-height:800px;font-size:16px;font-family:sans-serif;padding:24px;">${generateHTML(editor.getJSON(), editor.extensionManager.extensions)}</div>`;
-    console.log("Generated HTML:", html);
+    const html = `<div style="min-width:600px;min-height:800px;font-size:16px;font-family:sans-serif;padding:24px;">
+      ${generateHTML(editor.getJSON(), editor.extensionManager.extensions)}
+    </div>`;
 
     const element = document.createElement('div');
     element.innerHTML = html;
@@ -51,10 +51,22 @@ function App() {
   };
 
   return (
-    <div style={{ display: 'flex', gap: '16px', padding: '16px' }}>
-      <div style={{ flex: 1 }}>
-        <input type="file" onChange={handleUpload} />
-        {/* Show original PDF until first edit, then show edited PDF */}
+    <div style={{
+      display: 'flex',
+      height: '100vh',
+      width: '100%',
+      overflow: 'hidden',
+      fontFamily: 'sans-serif'
+    }}>
+      {/* LEFT PANEL */}
+      <div style={{
+        flex: 1,
+        borderRight: '2px solid #e2e8f0',
+        padding: '16px',
+        overflow: 'auto',
+        backgroundColor: '#ffffff'
+      }}>
+        <input type="file" onChange={handleUpload} style={{ marginBottom: '12px' }} />
         {originalFileUrl && !editedFileUrl && (
           <PdfViewer file={originalFileUrl} />
         )}
@@ -62,13 +74,33 @@ function App() {
           <PdfViewer file={editedFileUrl} />
         )}
       </div>
-      <div style={{ flex: 1 }}>
-        {tiptapContent && (
-          <Editor
-            tiptapJson={tiptapContent}
-            onUpdate={handleEditorUpdate}
-          />
-        )}
+
+      {/* RIGHT PANEL */}
+      <div style={{
+        flex: 1,
+        padding: '16px',
+        overflow: 'auto',
+        backgroundColor: '#f8fafc'
+      }}>
+        <Editor
+          tiptapJson={tiptapContent ?? {
+            type: 'doc',
+            content: [
+              {
+                type: 'heading',
+                attrs: { level: 2 },
+                content: [{ type: 'text', text: 'Welcome to the PDF Editor' }]
+              },
+              {
+                type: 'paragraph',
+                content: [
+                  { type: 'text', text: 'Upload a PDF to begin editing text here.' }
+                ]
+              }
+            ]
+          }}
+          onUpdate={handleEditorUpdate}
+        />
       </div>
     </div>
   );

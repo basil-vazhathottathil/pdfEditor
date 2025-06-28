@@ -1,24 +1,54 @@
-.editor-wrapper {
-  padding: 1rem;
+.editorWrapper {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
+
 .toolbar {
   display: flex;
   gap: 8px;
-  margin-bottom: 8px;
-  background: #f1f5f9;
-  padding: 4px;
-  border-radius: 6px;
+  padding: 12px 16px;
+  background-color: #f0f6ff;
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
+
 .toolbar button {
-  background: white;
-  border: 1px solid #ccc;
-  padding: 4px 8px;
-  font-weight: bold;
+  background: #ffffff;
+  border: 1px solid #bbb;
+  padding: 6px 12px;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: background 0.2s;
 }
+
+.toolbar button:hover {
+  background: #e2e8f0;
+}
+
 .toolbar button.active {
-  background: #3b82f6;
+  background-color: #3b82f6;
   color: white;
   border-color: #3b82f6;
+}
+
+.ProseMirror {
+  flex: 1;
+  padding: 1rem;
+  min-height: 400px;
+  outline: none;
+  white-space: pre-wrap;
+  font-size: 16px;
+  line-height: 1.6;
 }

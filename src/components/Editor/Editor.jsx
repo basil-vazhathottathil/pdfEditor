@@ -1,11 +1,31 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { FontSize } from '../extensions/FontSize';
+import { FontFamily } from '../extensions/FontFamily';
 import styles from './Editor.module.css';
+
+const fontSizes = [
+  { label: '12px', value: '12px' },
+  { label: '14px', value: '14px' },
+  { label: '16px', value: '16px' },
+  { label: '18px', value: '18px' },
+  { label: '20px', value: '20px' },
+  { label: '24px', value: '24px' },
+  { label: '32px', value: '32px' },
+];
+
+const fonts = [
+  { label: 'Sans Serif', value: 'sans-serif' },
+  { label: 'Serif', value: 'serif' },
+  { label: 'Monospace', value: 'monospace' },
+  { label: 'Arial', value: 'Arial, sans-serif' },
+  { label: 'Georgia', value: 'Georgia, serif' },
+  { label: 'Courier New', value: '"Courier New", monospace' },
+];
 
 export default function Editor({ tiptapJson, onUpdate }) {
   const editor = useEditor({
-    extensions: [StarterKit, FontSize],
+    extensions: [StarterKit, FontSize, FontFamily],
     content: tiptapJson,
     onUpdate: ({ editor }) => {
       if (onUpdate) onUpdate(editor);
@@ -16,7 +36,6 @@ export default function Editor({ tiptapJson, onUpdate }) {
 
   return (
     <div className={styles['editor-wrapper']}>
-      {/* Toolbar */}
       <div className={styles.toolbar}>
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -42,19 +61,29 @@ export default function Editor({ tiptapJson, onUpdate }) {
         >
           H2
         </button>
-        <button
-          onClick={() => editor.chain().focus().setFontSize('14px').run()}
+        {/* Font Family Dropdown */}
+        <select
+          onChange={e => editor.chain().focus().setFontFamily(e.target.value).run()}
+          value={editor.getAttributes('fontFamily').family || ''}
+          style={{ marginLeft: 8, minWidth: 120 }}
         >
-          14px
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setFontSize('18px').run()}
+          <option value="">Font</option>
+          {fonts.map(f => (
+            <option key={f.value} value={f.value}>{f.label}</option>
+          ))}
+        </select>
+        {/* Font Size Dropdown */}
+        <select
+          value={editor.getAttributes('fontSize').size || ''}
+          onChange={e => editor.chain().focus().setFontSize(e.target.value).run()}
+          style={{ marginLeft: 8, minWidth: 70 }}
         >
-          18px
-        </button>
+          <option value="">Font Size</option>
+          {fontSizes.map(size => (
+            <option key={size.value} value={size.value}>{size.label}</option>
+          ))}
+        </select>
       </div>
-
-      {/* Editable content */}
       <EditorContent editor={editor} />
     </div>
   );
